@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(OBSIDIAN_VAULT_PATH=\"/mnt/c/Users/serverman/documents/rgrep-mcp/test_vault\" python -c \"from src.rgrep_mcp.config import Config; c = Config(); c.validate(); print('Configuration valid!')\")",
+      "Bash(OBSIDIAN_VAULT_PATH=\"/mnt/c/Users/serverman/documents/rgrep-mcp/test_vault\" python3 -c \"from src.rgrep_mcp.config import Config; c = Config(); c.validate(); print('Configuration valid!')\")",
+      "Bash(OBSIDIAN_VAULT_PATH=\"/mnt/c/Users/serverman/documents/rgrep-mcp/test_vault\" python3 -c \"\nfrom src.rgrep_mcp.ripgrep import RipgrepWrapper\nrg = RipgrepWrapper('/mnt/c/Users/serverman/documents/rgrep-mcp/test_vault')\nresults = rg.search_content('machine learning')\nprint(f'Found {len(results)} results')\nfor r in results:\n    print(f'  {r[\\\"file\\\"]}:{r[\\\"line_number\\\"]} - {r[\\\"text\\\"][:50]}...')\n\")",
+      "Bash(echo $PATH)",
+      "Bash(mv:*)",
+      "Bash(python3:*)",
+      "Bash(grep:*)",
+      "Bash(python:*)",
+      "Bash(rg:*)"
+    ],
+    "deny": []
+  }
+}

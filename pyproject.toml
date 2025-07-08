@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rgrep-mcp"
+version = "0.1.0"
+description = "MCP server for efficient Obsidian vault search using ripgrep"
+authors = [{name = "User", email = "user@example.com"}]
+requires-python = ">=3.8"
+dependencies = [
+    "mcp>=1.0.0",
+    "pyyaml>=6.0",
+]
+readme = "README.md"
+license = {text = "MIT"}
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "black>=23.0",
+    "isort>=5.0",
+]
+
+[project.scripts]
+rgrep-mcp = "rgrep_mcp.server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.black]
+line-length = 100
+target-version = ["py38"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
