@@ -14,30 +14,16 @@ from .ripgrep import RipgrepWrapper
 
 # Initialize configuration and ripgrep wrapper globally
 try:
-    print("Loading configuration...", file=sys.stderr)
     config = Config()
-    print(f"Vault path: {config.vault_path}", file=sys.stderr)
-    
-    print("Validating configuration...", file=sys.stderr)
     config.validate()
-    
-    print("Initializing ripgrep wrapper...", file=sys.stderr)
     rg = RipgrepWrapper(config.vault_path)
-    print("Setup complete!", file=sys.stderr)
-    print(f"Ripgrep command: {rg.rg_command}", file=sys.stderr)
     
     # Test basic functionality
-    print("Testing basic search functionality...", file=sys.stderr)
-    test_results = rg.search_content("test", max_results=1)
-    print(f"Test search returned {len(test_results)} results", file=sys.stderr)
+    rg.search_content("test", max_results=1)
     
 except Exception as e:
-    print(f"CRITICAL ERROR during setup: {e}", file=sys.stderr)
-    print("Configuration details:", file=sys.stderr)
-    print(f"  OBSIDIAN_VAULT_PATH env var: {os.getenv('OBSIDIAN_VAULT_PATH')}", file=sys.stderr)
-    print(f"  Current working directory: {os.getcwd()}", file=sys.stderr)
-    import traceback
-    traceback.print_exc(file=sys.stderr)
+    print(f"Error: Could not initialize Obsidian search. {e}", file=sys.stderr)
+    print(f"Check that OBSIDIAN_VAULT_PATH is set to a valid vault directory.", file=sys.stderr)
     sys.exit(1)
 
 # Create FastMCP server
@@ -114,9 +100,6 @@ def rg_search_notes(
         return json.dumps(formatted_results, indent=2)
         
     except Exception as e:
-        print(f"Error in rg_search_notes: {e}", file=sys.stderr)
-        import traceback
-        traceback.print_exc(file=sys.stderr)
         return json.dumps({
             "error": str(e),
             "query": query,
@@ -184,7 +167,6 @@ def rg_search_links(
         return json.dumps(formatted_result, indent=2)
         
     except Exception as e:
-        print(f"Error in rg_search_links: {e}", file=sys.stderr)
         return json.dumps({"error": str(e)})
 
 
@@ -253,7 +235,6 @@ def rg_search_backlinks(
         return json.dumps(formatted_result, indent=2)
         
     except Exception as e:
-        print(f"Error in rg_search_backlinks: {e}", file=sys.stderr)
         return json.dumps({"error": str(e)})
 
 
@@ -319,7 +300,6 @@ def rg_search_recent_notes(
         return json.dumps(result, indent=2)
         
     except Exception as e:
-        print(f"Error in rg_search_recent_notes: {e}", file=sys.stderr)
         return json.dumps({"error": str(e)})
 
 
@@ -380,7 +360,6 @@ def rg_search_orphaned_notes(
         return json.dumps(result, indent=2)
         
     except Exception as e:
-        print(f"Error in rg_search_orphaned_notes: {e}", file=sys.stderr)
         return json.dumps({"error": str(e)})
 
 

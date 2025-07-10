@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rgrep-mcp"
-version = "0.1.0"
-description = "MCP server for efficient Obsidian vault search using ripgrep"
-authors = [{name = "User", email = "user@example.com"}]
+version = "1.0.0"
+description = "Intelligent Obsidian vault search for Claude - find notes, connections, and insights with context-aware results"
+authors = [{name = "Kirill Petrovsky", email = "kpetrovsky@gmail.com"}]
 requires-python = ">=3.8"
 dependencies = [
     "mcp>=1.0.0",
@@ -14,6 +14,25 @@ dependencies = [
 ]
 readme = "README.md"
 license = {text = "MIT"}
+keywords = ["obsidian", "search", "mcp", "claude", "knowledge-management", "pkm", "notes"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Text Processing :: Indexing",
+    "Topic :: Utilities",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/kpetrovsky/kp-ripgrep-mcp"
+"Repository" = "https://github.com/kpetrovsky/kp-ripgrep-mcp"
+"Issues" = "https://github.com/kpetrovsky/kp-ripgrep-mcp/issues"
 
 [project.optional-dependencies]
 dev = [

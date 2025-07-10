@@ -1,0 +1,1 @@
+"""Test suite for rgrep-mcp Obsidian vault search."""

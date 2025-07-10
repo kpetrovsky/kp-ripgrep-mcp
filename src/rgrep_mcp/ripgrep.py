@@ -176,24 +176,13 @@ class RipgrepWrapper:
         )
         
         try:
-            print(f"DEBUG: Executing ripgrep command: {' '.join(cmd)}", file=sys.stderr)
-            print(f"DEBUG: Working directory: {os.getcwd()}", file=sys.stderr)
-            print(f"DEBUG: Vault path exists: {Path(self.vault_path).exists()}", file=sys.stderr)
-            
             result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace')
-            print(f"DEBUG: Command return code: {result.returncode}", file=sys.stderr)
-            print(f"DEBUG: stdout length: {len(result.stdout) if result.stdout else 0}", file=sys.stderr)
-            
-            if result.stderr:
-                print(f"DEBUG: stderr: {result.stderr}", file=sys.stderr)
             
             if result.returncode == 0:
                 if not result.stdout:
-                    print("DEBUG: No stdout from ripgrep despite return code 0", file=sys.stderr)
                     return []
                 
                 parsed_results = self._parse_rg_json_output(result.stdout)
-                print(f"DEBUG: Parsed {len(parsed_results)} results", file=sys.stderr)
                 
                 # Add smart context if enabled
                 if smart_context:
@@ -201,15 +190,10 @@ class RipgrepWrapper:
                 
                 return parsed_results
             else:
-                print(f"DEBUG: Command failed with return code {result.returncode}", file=sys.stderr)
-                if result.stderr:
-                    print(f"DEBUG: Error details: {result.stderr}", file=sys.stderr)
+                # Command failed, return empty results
+                pass
             return []
-        except subprocess.SubprocessError as e:
-            print(f"DEBUG: SubprocessError: {e}", file=sys.stderr)
-            return []
-        except Exception as e:
-            print(f"DEBUG: Unexpected error: {e}", file=sys.stderr)
+        except (subprocess.SubprocessError, Exception):
             return []
     
     def search_frontmatter_only(
@@ -234,16 +218,11 @@ class RipgrepWrapper:
         cmd.append('--pcre2')
         
         try:
-            print(f"DEBUG: Executing ripgrep frontmatter command: {' '.join(cmd)}", file=sys.stderr)
             result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace')
-            print(f"DEBUG: Frontmatter return code: {result.returncode}", file=sys.stderr)
-            if result.stderr:
-                print(f"DEBUG: Frontmatter stderr: {result.stderr}", file=sys.stderr)
             if result.returncode == 0:
                 all_results = self._parse_rg_json_output(result.stdout)
                 # Filter to only results within frontmatter sections
                 frontmatter_results = self._filter_frontmatter_results(all_results)
-                print(f"DEBUG: Frontmatter filtered to {len(frontmatter_results)} results", file=sys.stderr)
                 
                 # Add smart context if enabled
                 if smart_context:
@@ -251,8 +230,7 @@ class RipgrepWrapper:
                 
                 return frontmatter_results[:max_results]
             return []
-        except subprocess.SubprocessError as e:
-            print(f"DEBUG: Frontmatter SubprocessError: {e}", file=sys.stderr)
+        except subprocess.SubprocessError:
             return []
     
     def search_content_only(
@@ -277,16 +255,11 @@ class RipgrepWrapper:
         cmd.append('--pcre2')
         
         try:
-            print(f"DEBUG: Executing ripgrep content-only command: {' '.join(cmd)}", file=sys.stderr)
             result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace')
-            print(f"DEBUG: Content-only return code: {result.returncode}", file=sys.stderr)
-            if result.stderr:
-                print(f"DEBUG: Content-only stderr: {result.stderr}", file=sys.stderr)
             if result.returncode == 0:
                 all_results = self._parse_rg_json_output(result.stdout)
                 # Filter to only results outside frontmatter sections
                 content_results = self._filter_content_results(all_results)
-                print(f"DEBUG: Content-only filtered to {len(content_results)} results", file=sys.stderr)
                 
                 # Add smart context if enabled
                 if smart_context:
@@ -294,8 +267,7 @@ class RipgrepWrapper:
                 
                 return content_results[:max_results]
             return []
-        except subprocess.SubprocessError as e:
-            print(f"DEBUG: Content-only SubprocessError: {e}", file=sys.stderr)
+        except subprocess.SubprocessError:
             return []
     
     def _filter_frontmatter_results(self, results: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -518,20 +490,13 @@ class RipgrepWrapper:
         )
         
         try:
-            print(f"DEBUG: Executing ripgrep find_links command: {' '.join(cmd)}", file=sys.stderr)
             result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace')
-            print(f"DEBUG: Find_links return code: {result.returncode}", file=sys.stderr)
-            if result.stderr:
-                print(f"DEBUG: Find_links stderr: {result.stderr}", file=sys.stderr)
             if result.returncode == 0:
                 matches = self._parse_rg_json_output(result.stdout)
-                print(f"DEBUG: Find_links parsed {len(matches)} raw matches", file=sys.stderr)
                 processed = self._process_link_matches(matches, url_pattern, title_pattern)
-                print(f"DEBUG: Find_links processed {len(processed)} link matches", file=sys.stderr)
                 return processed
             return []
-        except subprocess.SubprocessError as e:
-            print(f"DEBUG: Find_links SubprocessError: {e}", file=sys.stderr)
+        except subprocess.SubprocessError:
             return []
     
     def _process_link_matches(
