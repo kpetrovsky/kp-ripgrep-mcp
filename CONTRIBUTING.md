@@ -108,7 +108,7 @@ src/rgrep_mcp/
 
 tests/
 ├── test_smart_context.py      # Smart context functionality
-├── test_recent_notes_fixes.py # Date validation and limits
+├── test_server_date_validation.py # Date validation and limits
 └── test_*.py                  # Other test suites
 
 test_vault/           # Test data for development

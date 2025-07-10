@@ -60,3 +60,7 @@ check_*.py
 
 # Debug documentation
 DEBUG.md
+
+# Claude Code development settings (keep locally, don't commit)
+.claude/
+CLAUDE.md
