@@ -60,7 +60,7 @@ def rg_search_notes(
         search_scope: Where to search - "all", "content_only", or "frontmatter_only"
         case_sensitive: Whether search should be case sensitive
         folder: Optional folder to limit search scope
-        max_results: Maximum number of results to return (1-100)
+        max_results: Maximum number of results to return (minimum: 1, maximum: 100, capped automatically)
         smart_context: Whether to include smart context (frontmatter property names, content headings)
     
     Returns:
@@ -142,7 +142,7 @@ def rg_search_links(
         title_pattern: Optional regex to filter link titles
         case_sensitive: Whether search should be case sensitive
         folder: Optional folder to limit search scope
-        max_results: Maximum number of results to return (1-100)
+        max_results: Maximum number of results to return (minimum: 1, maximum: 100, capped automatically)
     
     Returns:
         JSON string with link search results
@@ -202,7 +202,7 @@ def rg_search_backlinks(
         target_note: Note to find backlinks for (relative to vault root)
         case_sensitive: Whether search should be case sensitive
         folder: Optional folder to limit search scope
-        max_results: Maximum number of results to return (1-100)
+        max_results: Maximum number of results to return (minimum: 1, maximum: 100, capped automatically)
         smart_context: Whether to include smart context (frontmatter property names, content headings)
     
     Returns:
@@ -267,10 +267,10 @@ def rg_search_recent_notes(
     """Find notes modified within date range.
     
     Args:
-        start_date: Start date in YYYY-MM-DD format
-        end_date: End date in YYYY-MM-DD format
+        start_date: Start date in YYYY-MM-DD format (e.g., "2024-01-15")
+        end_date: End date in YYYY-MM-DD format (e.g., "2024-01-31")
         folder: Optional folder to limit search scope
-        max_results: Maximum number of results to return (1-100)
+        max_results: Maximum number of results to return (minimum: 1, maximum: 100, capped automatically)
     
     Returns:
         JSON string with recent notes results
@@ -278,6 +278,25 @@ def rg_search_recent_notes(
     try:
         if max_results < 1 or max_results > 100:
             max_results = min(max(max_results, 1), 100)
+        
+        # Validate date formats if provided
+        if start_date is not None:
+            try:
+                from datetime import datetime
+                datetime.strptime(start_date, '%Y-%m-%d')
+            except ValueError:
+                return json.dumps({
+                    "error": f"Invalid start_date format: '{start_date}'. Expected YYYY-MM-DD format (e.g., '2024-01-15')"
+                })
+        
+        if end_date is not None:
+            try:
+                from datetime import datetime
+                datetime.strptime(end_date, '%Y-%m-%d')
+            except ValueError:
+                return json.dumps({
+                    "error": f"Invalid end_date format: '{end_date}'. Expected YYYY-MM-DD format (e.g., '2024-01-31')"
+                })
         
         files = rg.get_files_by_date_range(
             start_date=start_date,
@@ -315,7 +334,7 @@ def rg_search_orphaned_notes(
     Args:
         case_sensitive: Whether search should be case sensitive
         folder: Optional folder to limit search scope
-        max_results: Maximum number of results to return (1-100)
+        max_results: Maximum number of results to return (minimum: 1, maximum: 100, capped automatically)
     
     Returns:
         JSON string with orphaned notes results
